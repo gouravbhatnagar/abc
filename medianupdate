@@ -1,0 +1,110 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+class Solution{
+    
+    Integer[] leftMaxHeap = new Integer[50001];
+    Integer[] rightMinHeap = new Integer[50001];
+    
+    Integer leftIndex = -1;
+    Integer rightIndex = -1;
+    
+    static void addToHeap(Integer value){
+        
+        Integer[] chosenHeap = null;
+        Integer chosenHeapIndex = null;
+        
+        if(leftIndex+1 == 0){
+            
+            chosenHeap = leftMaxHeap;
+            chosenHeapIndex = leftIndex;
+            
+        }else if(value < leftMaxHeap[leftIndex]){
+            
+            chosenHeap = leftMaxHeap;
+            chosenHeapIndex = leftIndex;
+            
+        }else if(value > rightMinHeap[rightIndex]){
+            
+            chosenHeap = rightMinHeap;
+            chosenHeapIndex = rightIndex;
+            
+        }else{
+            
+            chosenHeap = leftMaxHeap;
+            chosenHeapIndex = leftIndex;
+            
+        }
+        
+        chosenHeap[++chosenHeapIndex] = value;
+        percolateUp(chosenHeap);
+        
+        reAdjustHeaps();
+    }
+    
+    static void removeFromHeap(Integer value){
+        
+        Integer[] chosenHeap = null;
+        
+        if(leftIndex > rightIndex){
+            
+            chosenHeap = rightMinHeap;
+            
+        }else if(leftIndex == rightIndex){
+            
+            chosenHeap = leftMaxHeap;
+            
+        }else if(leftIndex < rightIndex){
+            
+            chosenHeap = leftMaxHeap;
+            
+        }
+        
+        reAdjustHeaps();
+    }
+    
+    static void transformHeap(Character operation, Integer value){
+    
+       if(operation == 'r'){
+                
+            removeFromHeap(value);
+                
+       else if(operation == 'a'){
+                
+            addToHeap(value);
+                    
+       }    
+       
+    }
+    
+    /* Head ends here*/
+    static void median(String a[],int x[]) {
+        
+        
+        
+    }
+    
+    /* Tail starts here*/
+    
+   public static void main( String args[] ){
+      
+
+      Scanner in = new Scanner(System.in);
+      
+      int N;
+      N = in.nextInt();
+   
+      String s[] = new String[N];
+      int x[] = new int[N];
+      
+      for(int i=0; i<N; i++){
+         s[i] = in.next();
+         x[i] = in.nextInt();
+      }
+   
+      median(s,x);
+    }
+}
