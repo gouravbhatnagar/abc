@@ -12,6 +12,34 @@ class Solution{
     Integer leftIndex = -1;
     Integer rightIndex = -1;
     
+    static void reAdjustHeaps(){
+        
+        if(rightIndex > leftIndex){
+            
+            Integer firstElement = rightMinHeap[0]; 
+            
+            rightMinHeap[0] = rightMinHeap[rightIndex];
+            rightMinHeap[rightIndex--] = null;
+            percolateDown(rightMinHeap, 0, "min");
+            
+            leftMaxHeap[++leftIndex] = firstElement;
+            percolateUp(leftMaxHeap, "max");
+            
+        }else if(leftIndex - rightIndex == 2){
+        
+            Integer firstElement = leftMaxHeap[0];
+            
+            leftMaxHeap[0] = leftMaxHeap[leftIndex];
+            leftMaxHeap[leftIndex--] = null;
+            percolateDown(leftMaxHeap, 0, "max");
+            
+            rightMinHeap[++rightIndex] = firstElement;
+            percolateUp(rightMinHeap, "min");        
+            
+        }
+    
+    }
+    
     static void percolateUp(Integer[] heap, String type){
         
         Integer lastIndex = -1;
@@ -126,26 +154,31 @@ class Solution{
         
         Integer[] chosenHeap = null;
         Integer chosenHeapIndex = null;
+        String type = null;
         
         if(leftIndex+1 == 0){
             
             chosenHeap = leftMaxHeap;
             chosenHeapIndex = leftIndex;
+            type = "max";
             
         }else if(value =< leftMaxHeap[leftIndex]){
             
             chosenHeap = leftMaxHeap;
             chosenHeapIndex = leftIndex;
+            type = "max";
             
         }else if(value >= rightMinHeap[rightIndex]){
             
             chosenHeap = rightMinHeap;
             chosenHeapIndex = rightIndex;
+            type = "min";
             
         }else{
             
             chosenHeap = leftMaxHeap;
             chosenHeapIndex = leftIndex;
+            type = "max";
             
         }
         
@@ -159,6 +192,7 @@ class Solution{
         
         Integer[] chosenHeap = null;
         Integer chosenHeapIndex = null;
+        String type = null;
         
         if(leftIndex+1 != 0){
             
@@ -166,18 +200,20 @@ class Solution{
 
                 chosenHeap = leftMaxHeap;
                 chosenHeapIndex = leftIndex;
+                type = "max";
 
             }else if(value >= rightMinHeap[rightIndex]){
 
                 chosenHeap = rightMinHeap;
                 chosenHeapIndex = rightIndex;
-
+                type = "min";
+                
             } 
             
             Integer index = searchInHeap(value);
             chosenHeap[index] = chosenHeap[chosenHeapIndex];
             chosenHeapIndex--;
-            percolateDown(chosenHeap,index);
+            percolateDown(chosenHeap, index, type);
         }
         
         reAdjustHeaps();
