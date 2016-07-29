@@ -6,11 +6,11 @@ import java.util.regex.*;
 
 class Solution{
     
-    Integer[] leftMaxHeap = new Integer[50001];
-    Integer[] rightMinHeap = new Integer[50001];
+    static Integer[] leftMaxHeap = new Integer[50001];
+    static Integer[] rightMinHeap = new Integer[50001];
     
-    Integer leftIndex = -1;
-    Integer rightIndex = -1;
+    static Integer leftIndex = -1;
+    static Integer rightIndex = -1;
     
     static void reAdjustHeaps(){
         
@@ -162,7 +162,7 @@ class Solution{
             chosenHeapIndex = leftIndex;
             type = "max";
             
-        }else if(value =< leftMaxHeap[leftIndex]){
+        }else if(value <= leftMaxHeap[leftIndex]){
             
             chosenHeap = leftMaxHeap;
             chosenHeapIndex = leftIndex;
@@ -183,7 +183,7 @@ class Solution{
         }
         
         chosenHeap[++chosenHeapIndex] = value;
-        percolateUp(chosenHeap);
+        percolateUp(chosenHeap, type);
         
         reAdjustHeaps();
     }
@@ -196,7 +196,7 @@ class Solution{
         
         if(leftIndex+1 != 0){
             
-            if(value =< leftMaxHeap[leftIndex]){
+            if(value <= leftMaxHeap[leftIndex]){
 
                 chosenHeap = leftMaxHeap;
                 chosenHeapIndex = leftIndex;
@@ -236,7 +236,33 @@ class Solution{
     /* Head ends here*/
     static void median(String a[],int x[]) {
         
-       
+        for(int i = 0 ; i < a.length ; i++){
+            
+            if(leftIndex == -1 && a[i].charAt(0) == 'r'){
+                System.out.println("Wrong!");    
+            }else{
+                
+                transformHeap(a[i].charAt(0), x[i]); 
+                
+                Integer left = leftMaxHeap[leftIndex];
+                Integer right = rightMinHeap[rightIndex];
+                
+                if(left != null && right != null){
+                    
+                    if(leftIndex+rightIndex % 2 != 0){
+                        System.out.println(left);    
+                    }else{
+                        System.out.println((left+right)/2.0);    
+                    }
+                    
+                }
+                
+                
+            }
+                
+            
+        }
+            
     }
     
     /* Tail starts here*/
