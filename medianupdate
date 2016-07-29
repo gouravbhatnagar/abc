@@ -22,12 +22,12 @@ class Solution{
             chosenHeap = leftMaxHeap;
             chosenHeapIndex = leftIndex;
             
-        }else if(value < leftMaxHeap[leftIndex]){
+        }else if(value =< leftMaxHeap[leftIndex]){
             
             chosenHeap = leftMaxHeap;
             chosenHeapIndex = leftIndex;
             
-        }else if(value > rightMinHeap[rightIndex]){
+        }else if(value >= rightMinHeap[rightIndex]){
             
             chosenHeap = rightMinHeap;
             chosenHeapIndex = rightIndex;
@@ -48,19 +48,26 @@ class Solution{
     static void removeFromHeap(Integer value){
         
         Integer[] chosenHeap = null;
+        Integer chosenHeapIndex = null;
         
-        if(leftIndex > rightIndex){
+        if(leftIndex+1 != 0){
             
-            chosenHeap = rightMinHeap;
+            if(value =< leftMaxHeap[leftIndex]){
+
+                chosenHeap = leftMaxHeap;
+                chosenHeapIndex = leftIndex;
+
+            }else if(value >= rightMinHeap[rightIndex]){
+
+                chosenHeap = rightMinHeap;
+                chosenHeapIndex = rightIndex;
+
+            } 
             
-        }else if(leftIndex == rightIndex){
-            
-            chosenHeap = leftMaxHeap;
-            
-        }else if(leftIndex < rightIndex){
-            
-            chosenHeap = leftMaxHeap;
-            
+            Integer index = searchInHeap(value);
+            chosenHeap[index] = chosenHeap[chosenHeapIndex];
+            chosenHeapIndex--;
+            percolateDown(chosenHeap,index);
         }
         
         reAdjustHeaps();
@@ -71,7 +78,7 @@ class Solution{
        if(operation == 'r'){
                 
             removeFromHeap(value);
-                
+       }        
        else if(operation == 'a'){
                 
             addToHeap(value);
@@ -83,8 +90,7 @@ class Solution{
     /* Head ends here*/
     static void median(String a[],int x[]) {
         
-        
-        
+       
     }
     
     /* Tail starts here*/
