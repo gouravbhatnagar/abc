@@ -210,13 +210,32 @@ class Solution{
                 
             } 
             
-            Integer index = searchInHeap(value);
+            Integer index = searchInHeap(chosenHeap, value);
             chosenHeap[index] = chosenHeap[chosenHeapIndex];
             chosenHeapIndex--;
             percolateDown(chosenHeap, index, type);
         }
         
         reAdjustHeaps();
+    }
+    
+    static Integer searchInHeap(Integer[] heap, Integer value){
+    
+        Integer i = 0;
+        Integer response = null;
+        
+        while(heap[i] != null){
+        
+            if(heap[i] == value){
+                response = i;
+                break;
+            }
+            i++;
+            
+        }
+        
+        return response;
+        
     }
     
     static void transformHeap(Character operation, Integer value){
