@@ -12,6 +12,116 @@ class Solution{
     Integer leftIndex = -1;
     Integer rightIndex = -1;
     
+    static void percolateUp(Integer[] heap, String type){
+        
+        Integer lastIndex = -1;
+        
+        if(type.equals("min")){
+            lastIndex = rightIndex;    
+        }else{
+            lastIndex = leftIndex;    
+        }
+        
+        for(Integer i = (lastIndex-1)/2 ; i>=0 ; i--){
+            
+            if(type.equals("min")){
+                
+                if(heap[(i-1)/2]>heap[i]){
+                    
+                    Integer root = heap[(i-1)/2];
+                    heap[(i-1)/2] = heap[i];
+                    heap[i] = root;
+                
+                }   
+                
+            }else{
+                
+                if(heap[(i-1)/2]<heap[i]){
+                    
+                    Integer root = heap[(i-1)/2];
+                    heap[(i-1)/2] = heap[i];
+                    heap[i] = root;
+                
+                }  
+                
+            }    
+        
+        }
+        
+    }
+    
+    static void percolateDown(Integer[] heap, Integer index, String type){
+        
+        Integer[] queue = new Integer[50001];
+        Integer queueInIndex = -1;
+        Integer queueOutIndex = -1;
+        Integer heapIndex = -1;
+        
+        if(index != null){
+            heapIndex = index;    
+        }
+        
+        queue[++queueInIndex ] = heap[++heapIndex];
+        ++queueOutIndex;
+        
+        if(type.equals("max")){
+            
+            while(queue[queueOutIndex] != null){
+            
+                Integer root = queue[queueOutIndex];
+                Integer left = heap[2*queueOutIndex+1];
+                Integer right = heap[2*queueOutIndex+2];
+
+                if(left>right){
+                    if(root<left){
+                        heap[2*queueOutIndex+1] = root;
+                        heap[queueOutIndex] = left;
+                    }    
+                }else if(right>left){
+                    if(root<right){
+                        heap[2*queueOutIndex+2] = root;
+                        heap[queueOutIndex] = right;
+                    }    
+                }else{
+                    heap[2*queueOutIndex+1] = root;
+                    heap[queueOutIndex] = left;    
+                }
+                queue[++queueInIndex] = heap[2*queueOutIndex+1];
+                queue[++queueInIndex] = heap[2*queueOutIndex+2];
+                queueOutIndex++;
+            }
+            
+        }else{
+            
+            while(queue[queueOutIndex] != null){
+            
+                Integer root = queue[queueOutIndex];
+                Integer left = heap[2*queueOutIndex+1];
+                Integer right = heap[2*queueOutIndex+2];
+
+                if(left<right){
+                    if(root>left){
+                        heap[2*queueOutIndex+1] = root;
+                        heap[queueOutIndex] = left;
+                    }    
+                }else if(right<left){
+                    if(root>right){
+                        heap[2*queueOutIndex+2] = root;
+                        heap[queueOutIndex] = right;
+                    }    
+                }else{
+                    heap[2*queueOutIndex+1] = root;
+                    heap[queueOutIndex] = left;    
+                }
+                queue[++queueInIndex] = heap[2*queueOutIndex+1];
+                queue[++queueInIndex] = heap[2*queueOutIndex+2];
+                queueOutIndex++;
+            }    
+            
+        }
+        
+    }
+    
     static void addToHeap(Integer value){
         
         Integer[] chosenHeap = null;
