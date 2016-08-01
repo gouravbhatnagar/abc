@@ -4,7 +4,7 @@ import java.text.*;
 import java.math.*;
 import java.util.regex.*;
 
-class Solution{
+class MedianFinding{
     
     static Integer[] leftMaxHeap = new Integer[50001];
     static Integer[] rightMinHeap = new Integer[50001];
@@ -50,7 +50,7 @@ class Solution{
             lastIndex = leftIndex;    
         }
         
-        for(Integer i = (lastIndex-1)/2 ; i>=0 ; i--){
+        for(Integer i = (lastIndex-1)/2 ; i>0 ; i--){
             
             if(type.equals("min")){
                 
@@ -159,30 +159,29 @@ class Solution{
         if(leftIndex+1 == 0){
             
             chosenHeap = leftMaxHeap;
-            chosenHeapIndex = leftIndex;
             type = "max";
+            chosenHeap[++leftIndex] = value;
             
-        }else if(value <= leftMaxHeap[leftIndex]){
+        }else if(leftIndex != -1 && value <= leftMaxHeap[leftIndex]){
             
             chosenHeap = leftMaxHeap;
-            chosenHeapIndex = leftIndex;
             type = "max";
+            chosenHeap[++leftIndex] = value;
             
-        }else if(value >= rightMinHeap[rightIndex]){
+        }else if(rightIndex != -1 && value >= rightMinHeap[rightIndex]){
             
             chosenHeap = rightMinHeap;
-            chosenHeapIndex = rightIndex;
             type = "min";
+            chosenHeap[++rightIndex] = value;
             
         }else{
             
             chosenHeap = leftMaxHeap;
-            chosenHeapIndex = leftIndex;
             type = "max";
+            chosenHeap[++leftIndex] = value;
             
         }
         
-        chosenHeap[++chosenHeapIndex] = value;
         percolateUp(chosenHeap, type);
         
         reAdjustHeaps();
@@ -193,26 +192,29 @@ class Solution{
         Integer[] chosenHeap = null;
         Integer chosenHeapIndex = null;
         String type = null;
+        Integer index = null;
         
         if(leftIndex+1 != 0){
             
-            if(value <= leftMaxHeap[leftIndex]){
+            if(leftIndex != -1 && value <= leftMaxHeap[leftIndex]){
 
                 chosenHeap = leftMaxHeap;
-                chosenHeapIndex = leftIndex;
                 type = "max";
+                index = searchInHeap(chosenHeap, value);
+                chosenHeap[index] = chosenHeap[leftIndex];
+                leftIndex--;
 
-            }else if(value >= rightMinHeap[rightIndex]){
+            }else if(rightIndex != -1 && value >= rightMinHeap[rightIndex]){
 
                 chosenHeap = rightMinHeap;
-                chosenHeapIndex = rightIndex;
                 type = "min";
+                index = searchInHeap(chosenHeap, value);
+                chosenHeap[index] = chosenHeap[rightIndex];
+                rightIndex--;
                 
             } 
             
-            Integer index = searchInHeap(chosenHeap, value);
-            chosenHeap[index] = chosenHeap[chosenHeapIndex];
-            chosenHeapIndex--;
+            
             percolateDown(chosenHeap, index, type);
         }
         
@@ -263,8 +265,14 @@ class Solution{
                 
                 transformHeap(a[i].charAt(0), x[i]); 
                 
-                Integer left = leftMaxHeap[leftIndex];
-                Integer right = rightMinHeap[rightIndex];
+                Integer left = 0;
+                Integer right = 0;
+                
+                if(leftIndex != -1)
+                left = leftMaxHeap[leftIndex];
+                
+                if(rightIndex != -1)
+                right = rightMinHeap[rightIndex];
                 
                 if(left != null && right != null){
                     
