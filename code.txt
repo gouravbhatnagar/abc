@@ -1,0 +1,140 @@
+import java.util.Scanner;
+
+public class Solution {
+
+	static class Mapping {
+		Integer index;
+		String data;
+	}
+
+	public static void main(String[] args) {
+		/*
+		 * Enter your code here. Read input from STDIN. Print output to STDOUT.
+		 * Your class should be named Solution.
+		 */
+		Scanner s = new Scanner(System.in);
+		int noOfLines = s.nextInt();
+		s.nextLine();
+		Mapping[] firstHalf = new Mapping[noOfLines / 2];
+		Mapping[] secondHalf = new Mapping[noOfLines / 2];
+		Mapping[] secondHalfSorted = new Mapping[secondHalf.length];
+
+		for (int i = 0; i < noOfLines; i++) {
+
+			if (i <= firstHalf.length - 1) {
+
+				Mapping map = new Mapping();
+				map.index = s.nextInt();
+				map.data = s.nextLine().trim();
+				firstHalf[i] = map;
+
+			} else {
+
+				Mapping map = new Mapping();
+				map.index = s.nextInt();
+				map.data = s.nextLine().trim();
+				secondHalf[i - firstHalf.length] = map;
+
+			}
+		}
+
+		int[] sortingArr1 = new int[100];
+        int[] sortingArr2 = new int[100];
+        int[] sortingArr2_copy = new int[100];
+
+		for (int i = 0; i < firstHalf.length; i++) {
+			
+			sortingArr1[firstHalf[i].index]++;
+            sortingArr2[secondHalf[i].index]++;
+            sortingArr2_copy[secondHalf[i].index]++;
+
+		}
+        
+        for(int i = 1; i < 100; i++){
+            
+            sortingArr2[i] = sortingArr2[i] + sortingArr2[i-1];
+            sortingArr2_copy[i] = sortingArr2_copy[i] + sortingArr2_copy[i-1];
+            
+        }
+        
+        for (int i = secondHalf.length - 1; i >= 0; i--) {
+
+			secondHalfSorted[sortingArr2[secondHalf[i].index] - 1] = secondHalf[i];
+			sortingArr2[secondHalf[i].index]--;
+
+		}
+        
+        if(sortingArr1[0] > 0){
+            int counter1 = sortingArr1[0];
+            while(counter1>0){
+                System.out.print("- ");  
+                counter1--;
+            }
+        }
+        
+        int incrementalCounter = 0;
+        if(sortingArr2_copy[0]> 0){
+            int counter2 = sortingArr2_copy[0];
+            while(counter2>0){
+                System.out.print(secondHalfSorted[incrementalCounter++].data+" ");  
+                counter2--;
+            }
+        }
+        
+        StringBuilder hypenValues = null;
+        
+        for (int i = 1; i < 100; i++) {
+			
+			if(sortingArr1[i] > 0){
+                hypenValues = new StringBuilder();
+                int counter1 = sortingArr1[i];
+                int greedyStart = 1;
+                hypenValues = new StringBuilder();
+                hypenValues.append("- ");
+                
+                while(greedyStart < counter1){
+                
+                    if(counter1-greedyStart < greedyStart){
+                        
+                        System.out.print(hypenValues);
+                        counter1 = counter1-greedyStart;
+                        hypenValues.delete(0,hypenValues.length());
+                        greedyStart = 1;
+                        
+                    }else{
+                        
+                        if(greedyStart == 1){
+                            
+                            hypenValues.append("- "); 
+                            greedyStart++;
+                            
+                        } else {
+                            
+                            hypenValues.append(hypenValues);
+                            greedyStart = 2*greedyStart;
+                        
+                        }
+                    
+                    }
+                    
+                }
+                
+            }
+            
+            if(sortingArr2_copy[i] - sortingArr2_copy[i-1]> 0){
+                
+                int counter2 = sortingArr2_copy[i] - sortingArr2_copy[i-1];
+                while(counter2>0){
+                    
+                    System.out.print(secondHalfSorted[incrementalCounter++].data+" ");  
+                    counter2--;
+                    
+                }
+            
+            }
+
+		}
+		
+	}
+
+}
