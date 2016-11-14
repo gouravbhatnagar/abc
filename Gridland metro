@@ -1,0 +1,231 @@
+import java.util.Scanner;
+
+public class Solution {
+    
+     public static int[][] quickSort(int beginIndex, int endIndex, int[][] inputArray){
+    
+        if(beginIndex < endIndex){
+        
+            int midElement = beginIndex + (endIndex - beginIndex)/2;
+            int pivotElement = inputArray[midElement][0];
+            int pivotElementIndex = inputArray[midElement][1];
+            int pivotElementIndex1 = inputArray[midElement][2];
+        
+            inputArray[midElement][0] = inputArray[beginIndex][0];
+            inputArray[midElement][1] = inputArray[beginIndex][1];
+            inputArray[midElement][2] = inputArray[beginIndex][2];
+                        
+            int leftIndex = beginIndex+1;
+            int rightIndex = beginIndex+1;
+            
+            for(int start = beginIndex+1; start<=endIndex; start++){
+            
+                if(inputArray[start][0] <= pivotElement){
+                
+                    int temp = inputArray[leftIndex][0];
+                    inputArray[leftIndex][0] = inputArray[start][0];
+                    inputArray[start][0] = temp;
+                    
+                    temp = inputArray[leftIndex][1];
+                    inputArray[leftIndex][1] = inputArray[start][1];
+                    inputArray[start][1] = temp;
+                    
+                    temp = inputArray[leftIndex][2];
+                    inputArray[leftIndex][2] = inputArray[start][2];
+                    inputArray[start][2] = temp;
+                    
+                    leftIndex++;
+                    rightIndex++;
+                    
+                }else{
+                
+                    rightIndex++;
+                    
+                }
+                
+            }
+            
+            if(leftIndex == rightIndex){
+            
+                leftIndex = endIndex;
+                inputArray[beginIndex][0] = inputArray[leftIndex][0];
+                inputArray[leftIndex][0] = pivotElement;
+                
+                inputArray[beginIndex][1] = inputArray[leftIndex][1];
+                inputArray[leftIndex][1] = pivotElementIndex;
+                
+                inputArray[beginIndex][2] = inputArray[leftIndex][2];
+                inputArray[leftIndex][2] = pivotElementIndex1;
+                
+            }else if(rightIndex > leftIndex){
+            
+                leftIndex--;
+                inputArray[beginIndex][0] = inputArray[leftIndex][0];
+                inputArray[leftIndex][0] = pivotElement;
+                
+                inputArray[beginIndex][1] = inputArray[leftIndex][1];
+                inputArray[leftIndex][1] = pivotElementIndex;
+                
+                inputArray[beginIndex][2] = inputArray[leftIndex][2];
+                inputArray[leftIndex][2] = pivotElementIndex1;
+                
+            }
+            
+            inputArray = quickSort(beginIndex, leftIndex-1, inputArray);
+            inputArray = quickSort(leftIndex+1, endIndex, inputArray);
+            
+        }
+        
+        return inputArray;
+    }
+    
+    public static int[][] innerQuickSort(int beginIndex, int endIndex, int[][] inputArray){
+    
+        if(beginIndex < endIndex){
+        
+            int midElement = beginIndex + (endIndex - beginIndex)/2;
+            int pivotElement = inputArray[midElement][1];
+            int pivotElementIndex = inputArray[midElement][2];
+                    
+            inputArray[midElement][1] = inputArray[beginIndex][1];
+            inputArray[midElement][2] = inputArray[beginIndex][2];
+                                    
+            int leftIndex = beginIndex+1;
+            int rightIndex = beginIndex+1;
+            
+            for(int start = beginIndex+1; start<=endIndex; start++){
+            
+                if(inputArray[start][1] <= pivotElement){
+                
+                    int temp = inputArray[leftIndex][1];
+                    inputArray[leftIndex][1] = inputArray[start][1];
+                    inputArray[start][1] = temp;
+                    
+                    temp = inputArray[leftIndex][2];
+                    inputArray[leftIndex][2] = inputArray[start][2];
+                    inputArray[start][2] = temp;
+                    
+                    leftIndex++;
+                    rightIndex++;
+                    
+                }else{
+                
+                    rightIndex++;
+                    
+                }
+                
+            }
+            
+            if(leftIndex == rightIndex){
+            
+                leftIndex = endIndex;
+                inputArray[beginIndex][1] = inputArray[leftIndex][1];
+                inputArray[leftIndex][1] = pivotElement;
+                
+                inputArray[beginIndex][2] = inputArray[leftIndex][2];
+                inputArray[leftIndex][2] = pivotElementIndex;
+                
+            }else if(rightIndex > leftIndex){
+            
+                leftIndex--;
+                inputArray[beginIndex][1] = inputArray[leftIndex][1];
+                inputArray[leftIndex][1] = pivotElement;
+                
+                inputArray[beginIndex][2] = inputArray[leftIndex][2];
+                inputArray[leftIndex][2] = pivotElementIndex;
+                
+            }
+            
+            inputArray = quickSort(beginIndex, leftIndex-1, inputArray);
+            inputArray = quickSort(leftIndex+1, endIndex, inputArray);
+            
+        }
+        
+        return inputArray;
+    }
+    
+    public static int[][] quickSort(int[][] inputArray){
+    
+        return  quickSort(0, inputArray.length-1, inputArray);
+        
+    }
+    
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        Scanner s = new Scanner(System.in);
+        int k,m,n = 0;
+        int row = 0;
+        
+        m = s.nextInt();
+        n = s.nextInt();
+        k = s.nextInt();
+        
+        int[][] trackInfo = new int[k][3];
+        int trackOccupancies = 0;
+        
+        for(int i=0; i<k; i++){
+        
+            row = s.nextInt();
+            trackInfo[i][0] = row;
+            trackInfo[i][1] = s.nextInt();
+            trackInfo[i][2] = s.nextInt();
+            
+        }
+        
+        trackInfo = quickSort(trackInfo);
+        
+        int startIndex = 0;
+        int endIndex = 0;
+        
+        for(int i=0; i<trackInfo.length; i++){
+        
+            if(i==trackInfo.length-1 || trackInfo[i][0] != trackInfo[i+1][0]){
+            
+                endIndex = i;
+                
+                if (startIndex == endIndex) {
+                    
+                    trackOccupancies = trackOccupancies + trackInfo[i][2] - trackInfo[i][1] + 1;
+                
+                } else {
+                    
+                    trackInfo = innerQuickSort(startIndex, endIndex, trackInfo); 
+                    int startTime = trackInfo[startIndex][1];
+                    int endTime = trackInfo[startIndex][2];
+                    
+                    for(int j=startIndex+1; j<=endIndex; j++){
+                        
+                        if (trackInfo[j][1]<=endTime) {
+                        
+                            if(trackInfo[j][2]>endTime){
+                            
+                                endTime = trackInfo[j][2];
+                                
+                            }
+                            
+                        } else {
+                            
+                            trackOccupancies = trackOccupancies + endTime - startTime + 1;
+                            startTime = trackInfo[j][1];
+                            endTime = trackInfo[j][2];
+                            
+                        }
+                        
+                        if (j==endIndex) {
+                            
+                            trackOccupancies = trackOccupancies + endTime - startTime + 1;
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+                startIndex = endIndex = i+1;
+            }
+            
+        }
+        
+        System.out.println(m*n - trackOccupancies);
+    }
+}
