@@ -1,0 +1,85 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        Scanner s = new Scanner(System.in);
+        int length = s.nextInt();
+        String str = s.nextLine();
+        int aCount=0;
+        int cCount=0;
+        int tCount=0;
+        int gCount=0;
+        
+        for(int i=0; i<str.length(); i++){
+            
+            if(str.charAt(i) == 'A') {
+                aCount++;    
+            } else if(str.charAt(i) == 'C') {
+                cCount++;    
+            } else if(str.charAt(i) == 'T') {
+                tCount++;    
+            } else if(str.charAt(i) == 'G') {
+                gCount++;    
+            }
+        
+        }
+        
+        int[][] aIndex = new int[2][aCount];
+        int[][] cIndex = new int[2][cCount];
+        int[][] tIndex = new int[2][tCount];
+        int[][] gIndex = new int[2][gCount];
+        
+        int aIndexCounter = 0;
+        int cIndexCounter = 0;
+        int tIndexCounter = 0;
+        int gIndexCounter = 0;
+        
+        char prevChar = str.charAt(0);
+        char curChar = '';
+        
+        if(str.charAt(0) == 'A') {
+            aIndex[0][aIndexCounter++] = 0;    
+        } else if(str.charAt(0) == 'C') {
+            cIndex[0][cIndexCounter++] = 0;    
+        } else if(str.charAt(0) == 'T') {
+            tIndex[0][tIndexCounter++] = 0;    
+        } else if(str.charAt(0) == 'G') {
+            gIndex[0][gIndexCounter++] = 0;    
+        }   
+        
+        for(int i=0; i<str.length(); i++){
+            
+            curChar = str.charAt(i);
+            
+            if(prevChar!=curChar) {
+            
+                if(str.charAt(i) == 'A') {
+                    aIndex[1][aIndexCounter-1] = i-1; 
+                    aIndex[0][aIndexCounter++] = i;    
+                } else if(str.charAt(i) == 'C') {
+                    cIndex[1][cIndexCounter-1] = i-1; 
+                    cIndex[0][cIndexCounter++] = i;    
+                } else if(str.charAt(i) == 'T') {
+                    tIndex[1][tIndexCounter-1] = i-1;
+                    tIndex[0][tIndexCounter++] = i;    
+                } else if(str.charAt(i) == 'G') {
+                    gIndex[1][gIndexCounter-1] = i-1;    
+                    gIndex[0][gIndexCounter++] = i;    
+                }
+                
+            }
+            
+            prevChar = curChar;
+        
+        }
+        
+        
+        
+    }
+}
