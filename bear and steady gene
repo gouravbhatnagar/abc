@@ -35,10 +35,14 @@ public class Solution {
         int[][] tIndex = new int[2][tCount];
         int[][] gIndex = new int[2][gCount];
         
-        int aIndexCounter = 0;
-        int cIndexCounter = 0;
-        int tIndexCounter = 0;
-        int gIndexCounter = 0;
+        int aIndexCounter = 2;
+        int cIndexCounter = 2;
+        int tIndexCounter = 2;
+        int gIndexCounter = 2;
+        //int aCounter = 0;
+        //int cCounter = 0;
+        //int tCounter = 0;
+        //int gCounter = 0;
         
         char prevChar = str.charAt(0);
         char curChar = '';
@@ -60,16 +64,20 @@ public class Solution {
             if(prevChar!=curChar) {
             
                 if(str.charAt(i) == 'A') {
-                    aIndex[1][aIndexCounter-1] = i-1; 
+                    aIndex[1][aIndexCounter-1] = i-1;
+                    //aCounter = aCounter+aIndex[1][aIndexCounter-1]-aIndex[0][aIndexCounter-1]+1;
                     aIndex[0][aIndexCounter++] = i;    
                 } else if(str.charAt(i) == 'C') {
                     cIndex[1][cIndexCounter-1] = i-1; 
+                    //cCounter = cCounter+cIndex[1][cIndexCounter-1]-cIndex[0][cIndexCounter-1]+1;
                     cIndex[0][cIndexCounter++] = i;    
                 } else if(str.charAt(i) == 'T') {
                     tIndex[1][tIndexCounter-1] = i-1;
+                    //tCounter = tCounter+tIndex[1][tIndexCounter-1]-tIndex[0][tIndexCounter-1]+1;
                     tIndex[0][tIndexCounter++] = i;    
                 } else if(str.charAt(i) == 'G') {
-                    gIndex[1][gIndexCounter-1] = i-1;    
+                    gIndex[1][gIndexCounter-1] = i-1; 
+                    //gCounter = gCounter+gIndex[1][gIndexCounter-1]-gIndex[0][gIndexCounter-1]+1;
                     gIndex[0][gIndexCounter++] = i;    
                 }
                 
@@ -79,7 +87,150 @@ public class Solution {
         
         }
         
+        if(str.charAt(str.length()-1) == 'A') {
+            aIndex[1][aIndexCounter-1] = str.length()-1; 
+            //aCounter = aCounter+aIndex[1][aIndexCounter-1]-aIndex[0][aIndexCounter-1]+1;
+        } else if(str.charAt(str.length()-1) == 'C') {
+            cIndex[1][cIndexCounter-1] = str.length()-1; 
+            //cCounter = cCounter+cIndex[1][cIndexCounter-1]-cIndex[0][cIndexCounter-1]+1;
+        } else if(str.charAt(str.length()-1) == 'T') {
+            tIndex[1][tIndexCounter-1] = str.length()-1;
+            //tCounter = tCounter+tIndex[1][tIndexCounter-1]-tIndex[0][tIndexCounter-1]+1;           
+        } else if(str.charAt(str.length()-1) == 'G') {
+            gIndex[1][gIndexCounter-1] = str.length()-1;    
+            //gCounter = gCounter+gIndex[1][gIndexCounter-1]-gIndex[0][gIndexCounter-1]+1;
+        }
         
+        int idealCount = str.length()/4;
         
+        int eligibleSize=0;
+        
+        if(aCount>idealCount){
+            eligibleSize++;    
+        }
+        
+        if(cCount>idealCount){
+            eligibleSize++;    
+        }
+        
+        if(tCount>idealCount){
+            eligibleSize++;    
+        }
+        
+        if(gCount>idealCount){
+            eligibleSize++;    
+        }
+        
+        int[][][] eligibleArr = new int[eligibleSize][][];
+        
+        eligibleSize=0;
+        
+        if(aCount>idealCount){
+            aIndex[0][0]=idealCount-aCount;
+            aIndex[1][0]=0;
+            aIndex[0][1]=0;
+            aIndex[1][1]=2;
+
+            eligibleArr[eligibleSize++][][] = aIndex;
+        }
+        
+        if(cCount>idealCount){
+            cIndex[0][0]=idealCount-cCount;
+            cIndex[1][0]=0;
+            cIndex[0][1]=0;
+            cIndex[1][1]=2;
+            
+            eligibleArr[eligibleSize++][][] = cIndex;
+        }
+        
+        if(tCount>idealCount){
+            tIndex[0][0]=idealCount-tCount;
+            tIndex[1][0]=0;
+            tIndex[0][1]=0;
+            tIndex[1][1]=2;
+            
+            eligibleArr[eligibleSize++][][] = tIndex;
+        }
+        
+        if(gCount>idealCount){
+            gIndex[0][0]=idealCount-gCount;
+            gIndex[1][0]=0;
+            gIndex[0][1]=0;
+            gIndex[1][1]=2;
+            
+            eligibleArr[eligibleSize++][][] = gIndex;
+        }
+        int minimumLen = 999999;
+        while(true) {
+        
+            int[][] curArray = null;
+            boolean matchFound = true;
+            int nearestStartIndex = 999999;
+            int nearsetEndIndex = 0;
+            
+            for(int[][] arr:eligibleArr){
+            
+                if(arr[0][0]>arr[1][0]){
+                
+                    matchFound = false;
+                    
+                    if(arr[0][arr[1][1]]<nearestStartIndex){
+                        nearestStartIndex=arr[0][arr[1][1]];
+                        curArray=arr;
+                    }
+                
+                }
+            }
+            
+            if(matchFound==false){
+                curArray[1][0] = curArray[1][0] + curArray[1][curArray[1][1]] - curArray[0][curArray[1][1]] + 1;
+                curArray[1][1] = curArray[1][1] + 1;
+            } else {
+                
+                for(int[][] arr:eligibleArr){
+            
+                    if(arr[0][arr[1][1]]>nearsetEndIndex){
+                        
+                        nearestEndIndex=arr[0][arr[1][1]];
+                
+                    }
+                    
+                    if(arr[0][arr[1][0]]<nearestStartIndex){
+                        
+                        nearestStartIndex=arr[0][arr[1][0]];
+                
+                    }
+                    
+                }
+            
+                if(minimumLen>nearsetEndIndex-nearestStartIndex+1){
+                    minimumLen=nearsetEndIndex-nearestStartIndex+1;    
+                }
+                
+                while(true){
+                
+                    nearestStartIndex = 999999;
+                    
+                    for(int[][] arr:eligibleArr){
+                        
+                        if(arr[0][arr[0][1]]<nearestStartIndex){
+                            nearestStartIndex=arr[0][arr[0][1]];
+                            curArray=arr;
+                        }
+                    }
+                    
+                    curArray[1][0]=curArray[1][0]-(curArray[1][0]) 
+                    if(-){
+                        
+                    }
+                    
+                }
+                
+                
+                
+                
+            }
+            
+        }
     }
 }
