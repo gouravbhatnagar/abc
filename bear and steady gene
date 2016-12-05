@@ -4,7 +4,7 @@ import java.text.*;
 import java.math.*;
 import java.util.regex.*;
 
-public class Solution {
+public class BearAndSteadyGene {
 
     public static void main(String[] args) {
         /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
@@ -45,7 +45,7 @@ public class Solution {
         //int gCounter = 0;
         
         char prevChar = str.charAt(0);
-        char curChar = '';
+        char curChar;
         
         if(str.charAt(0) == 'A') {
             aIndex[0][aIndexCounter++] = 0;    
@@ -131,7 +131,7 @@ public class Solution {
             aIndex[0][1]=0;
             aIndex[1][1]=2;
 
-            eligibleArr[eligibleSize++][][] = aIndex;
+            eligibleArr[eligibleSize++] = aIndex;
         }
         
         if(cCount>idealCount){
@@ -140,7 +140,7 @@ public class Solution {
             cIndex[0][1]=0;
             cIndex[1][1]=2;
             
-            eligibleArr[eligibleSize++][][] = cIndex;
+            eligibleArr[eligibleSize++] = cIndex;
         }
         
         if(tCount>idealCount){
@@ -149,7 +149,7 @@ public class Solution {
             tIndex[0][1]=0;
             tIndex[1][1]=2;
             
-            eligibleArr[eligibleSize++][][] = tIndex;
+            eligibleArr[eligibleSize++] = tIndex;
         }
         
         if(gCount>idealCount){
@@ -158,7 +158,7 @@ public class Solution {
             gIndex[0][1]=0;
             gIndex[1][1]=2;
             
-            eligibleArr[eligibleSize++][][] = gIndex;
+            eligibleArr[eligibleSize++] = gIndex;
         }
         int minimumLen = 999999;
         while(true) {
@@ -166,7 +166,7 @@ public class Solution {
             int[][] curArray = null;
             boolean matchFound = true;
             int nearestStartIndex = 999999;
-            int nearsetEndIndex = 0;
+            int nearestEndIndex = 0;
             
             for(int[][] arr:eligibleArr){
             
@@ -187,27 +187,43 @@ public class Solution {
                 curArray[1][1] = curArray[1][1] + 1;
             } else {
                 
+            	int[][] endArr = null;
+            	int[][] startArr = null;
+            	int tempMinLen = 0;
+            	
                 for(int[][] arr:eligibleArr){
             
-                    if(arr[0][arr[1][1]]>nearsetEndIndex){
+                    if(arr[0][arr[1][1]]>nearestEndIndex){
                         
                         nearestEndIndex=arr[0][arr[1][1]];
+                        endArr=arr;
                 
                     }
                     
                     if(arr[0][arr[1][0]]<nearestStartIndex){
                         
                         nearestStartIndex=arr[0][arr[1][0]];
+                        startArr=arr;
                 
                     }
                     
                 }
             
-                if(minimumLen>nearsetEndIndex-nearestStartIndex+1){
-                    minimumLen=nearsetEndIndex-nearestStartIndex+1;    
+                tempMinLen = nearestEndIndex-nearestStartIndex+1;
+                
+                if(endArr[1][0]>endArr[0][0] && endArr[1][1]-endArr[0][1]>=endArr[1][0]-endArr[0][0]){
+                	
+                	tempMinLen = tempMinLen - (endArr[1][0] - endArr[0][0]);
+                	endArr[1][0] = endArr[0][0];
+                	
+                }
+
+                if(minimumLen>tempMinLen){
+                    minimumLen=tempMinLen;    
                 }
                 
-                while(true){
+                
+                /*while(true){
                 
                     nearestStartIndex = 999999;
                     
@@ -219,12 +235,12 @@ public class Solution {
                         }
                     }
                     
-                    curArray[1][0]=curArray[1][0]-(curArray[1][0]) 
+                    curArray[1][0]=curArray[1][0]-(curArray[1][0]);
                     if(-){
                         
                     }
                     
-                }
+                }*/
                 
                 
                 
