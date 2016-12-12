@@ -1,8 +1,6 @@
-import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
+package com.barclays.sp.lion.service.triparty.util.common;
+
+import java.util.Scanner;
 
 public class BearAndSteadyGene {
 
@@ -128,7 +126,7 @@ public class BearAndSteadyGene {
         if(aCount>idealCount){
             aIndex[0][0]=idealCount-aCount;
             aIndex[1][0]=0;
-            aIndex[0][1]=0;
+            aIndex[0][1]=2;
             aIndex[1][1]=2;
 
             eligibleArr[eligibleSize++] = aIndex;
@@ -137,7 +135,7 @@ public class BearAndSteadyGene {
         if(cCount>idealCount){
             cIndex[0][0]=idealCount-cCount;
             cIndex[1][0]=0;
-            cIndex[0][1]=0;
+            cIndex[0][1]=2;
             cIndex[1][1]=2;
             
             eligibleArr[eligibleSize++] = cIndex;
@@ -146,7 +144,7 @@ public class BearAndSteadyGene {
         if(tCount>idealCount){
             tIndex[0][0]=idealCount-tCount;
             tIndex[1][0]=0;
-            tIndex[0][1]=0;
+            tIndex[0][1]=2;
             tIndex[1][1]=2;
             
             eligibleArr[eligibleSize++] = tIndex;
@@ -155,12 +153,13 @@ public class BearAndSteadyGene {
         if(gCount>idealCount){
             gIndex[0][0]=idealCount-gCount;
             gIndex[1][0]=0;
-            gIndex[0][1]=0;
+            gIndex[0][1]=2;
             gIndex[1][1]=2;
             
             eligibleArr[eligibleSize++] = gIndex;
         }
         int minimumLen = 999999;
+        
         while(true) {
         
             int[][] curArray = null;
@@ -187,35 +186,35 @@ public class BearAndSteadyGene {
                 curArray[1][1] = curArray[1][1] + 1;
             } else {
                 
-            	int[][] endArr = null;
-            	int[][] startArr = null;
-            	int tempMinLen = 0;
-            	
-                for(int[][] arr:eligibleArr){
+                int[][] endArr = curArray;
+                int[][] startArr = null;
+                int tempMinLen = 0;
+                nearestEndIndex=endArr[0][endArr[1][1]-1];
+                /*for(int[][] arr:eligibleArr){
             
-                    if(arr[0][arr[1][1]]>nearestEndIndex){
+                    if(arr[0][arr[1][1]-1]>nearestEndIndex){
                         
-                        nearestEndIndex=arr[0][arr[1][1]];
+                        nearestEndIndex=arr[0][arr[1][1]-1];
                         endArr=arr;
                 
                     }
                     
-                    if(arr[0][arr[1][0]]<nearestStartIndex){
+                    if(arr[0][arr[0][1]]<nearestStartIndex){
                         
-                        nearestStartIndex=arr[0][arr[1][0]];
+                        nearestStartIndex=arr[0][arr[0][1]];
                         startArr=arr;
                 
                     }
                     
-                }
+                }*/
             
                 tempMinLen = nearestEndIndex-nearestStartIndex+1;
                 
-                if(endArr[1][0]>endArr[0][0] && endArr[1][1]-endArr[0][1]>=endArr[1][0]-endArr[0][0]){
-                	
-                	tempMinLen = tempMinLen - (endArr[1][0] - endArr[0][0]);
-                	endArr[1][0] = endArr[0][0];
-                	
+                if(endArr[1][0]>endArr[0][0] && endArr[1][endArr[1][1]-1]-endArr[0][endArr[1][1]-1]>=endArr[1][0]-endArr[0][0]){
+                    
+                    tempMinLen = tempMinLen + (endArr[1][0] - endArr[0][0]);
+                    endArr[1][0] = endArr[0][0];
+                    
                 }
 
                 if(minimumLen>tempMinLen){
@@ -223,24 +222,45 @@ public class BearAndSteadyGene {
                 }
                 
                 
-                /*while(true){
+                while(true){
                 
                     nearestStartIndex = 999999;
                     
                     for(int[][] arr:eligibleArr){
                         
                         if(arr[0][arr[0][1]]<nearestStartIndex){
+                            
                             nearestStartIndex=arr[0][arr[0][1]];
-                            curArray=arr;
-                        }
-                    }
+                            startArr=arr;
                     
-                    curArray[1][0]=curArray[1][0]-(curArray[1][0]);
-                    if(-){
+                        }
                         
                     }
                     
-                }*/
+                    if(startArr[1][0]-startArr[0][0]>startArr[1][startArr[0][1]]-startArr[0][startArr[0][1]]){
+                        tempMinLen = tempMinLen - (startArr[1][startArr[0][1]]-startArr[0][startArr[0][1]]);
+                        startArr[1][0] = startArr[0][0];
+                        startArr[0][1] = startArr[0][1]+1;
+                        
+                    }else if(startArr[1][0]-startArr[0][0]<startArr[1][startArr[0][1]]-startArr[0][startArr[0][1]]){
+                        tempMinLen = tempMinLen - (startArr[1][startArr[0][1]]-startArr[0][startArr[0][1]]) + (startArr[1][0]-startArr[0][0]);
+                        if(minimumLen>tempMinLen){
+                            minimumLen=tempMinLen;    
+                        }
+                        startArr[1][0] = startArr[1][0]-(startArr[1][startArr[0][1]]-startArr[0][startArr[0][1]]+1);
+                        startArr[0][1] = startArr[0][1]+1;
+                        break;
+                    }else {
+                        tempMinLen = tempMinLen - (startArr[1][startArr[0][1]]-startArr[0][startArr[0][1]]);
+                        if(minimumLen>tempMinLen){
+                            minimumLen=tempMinLen;    
+                        }
+                        startArr[1][0] = startArr[1][0]-(startArr[1][startArr[0][1]]-startArr[0][startArr[0][1]]+1);
+                        startArr[0][1] = startArr[0][1]+1;
+                        break;
+                    }
+                               
+                }
                 
                 
                 
