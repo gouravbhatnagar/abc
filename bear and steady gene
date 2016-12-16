@@ -8,6 +8,7 @@ public class BearAndSteadyGene {
         /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
         Scanner s = new Scanner(System.in);
         int length = s.nextInt();
+        s.nextLine();
         String str = s.nextLine();
         int aCount=0;
         int cCount=0;
@@ -28,10 +29,10 @@ public class BearAndSteadyGene {
         
         }
         
-        int[][] aIndex = new int[2][aCount];
-        int[][] cIndex = new int[2][cCount];
-        int[][] tIndex = new int[2][tCount];
-        int[][] gIndex = new int[2][gCount];
+        int[][] aIndex = new int[2][aCount+2];
+        int[][] cIndex = new int[2][cCount+2];
+        int[][] tIndex = new int[2][tCount+2];
+        int[][] gIndex = new int[2][gCount+2];
         
         int aIndexCounter = 2;
         int cIndexCounter = 2;
@@ -61,20 +62,30 @@ public class BearAndSteadyGene {
             
             if(prevChar!=curChar) {
             
-                if(str.charAt(i) == 'A') {
+                if(prevChar == 'A') {
                     aIndex[1][aIndexCounter-1] = i-1;
                     //aCounter = aCounter+aIndex[1][aIndexCounter-1]-aIndex[0][aIndexCounter-1]+1;
-                    aIndex[0][aIndexCounter++] = i;    
-                } else if(str.charAt(i) == 'C') {
+                } else if(prevChar == 'C') {
                     cIndex[1][cIndexCounter-1] = i-1; 
                     //cCounter = cCounter+cIndex[1][cIndexCounter-1]-cIndex[0][cIndexCounter-1]+1;
-                    cIndex[0][cIndexCounter++] = i;    
-                } else if(str.charAt(i) == 'T') {
+                } else if(prevChar == 'T') {
                     tIndex[1][tIndexCounter-1] = i-1;
                     //tCounter = tCounter+tIndex[1][tIndexCounter-1]-tIndex[0][tIndexCounter-1]+1;
-                    tIndex[0][tIndexCounter++] = i;    
-                } else if(str.charAt(i) == 'G') {
+                } else if(prevChar == 'G') {
                     gIndex[1][gIndexCounter-1] = i-1; 
+                    //gCounter = gCounter+gIndex[1][gIndexCounter-1]-gIndex[0][gIndexCounter-1]+1;
+                }
+                
+                if(curChar == 'A') {
+                    //aCounter = aCounter+aIndex[1][aIndexCounter-1]-aIndex[0][aIndexCounter-1]+1;
+                    aIndex[0][aIndexCounter++] = i;    
+                } else if(curChar == 'C') {
+                    //cCounter = cCounter+cIndex[1][cIndexCounter-1]-cIndex[0][cIndexCounter-1]+1;
+                    cIndex[0][cIndexCounter++] = i;    
+                } else if(curChar == 'T') {
+                    //tCounter = tCounter+tIndex[1][tIndexCounter-1]-tIndex[0][tIndexCounter-1]+1;
+                    tIndex[0][tIndexCounter++] = i;    
+                } else if(curChar == 'G') {
                     //gCounter = gCounter+gIndex[1][gIndexCounter-1]-gIndex[0][gIndexCounter-1]+1;
                     gIndex[0][gIndexCounter++] = i;    
                 }
@@ -124,7 +135,7 @@ public class BearAndSteadyGene {
         eligibleSize=0;
         
         if(aCount>idealCount){
-            aIndex[0][0]=idealCount-aCount;
+            aIndex[0][0]=aCount-idealCount;
             aIndex[1][0]=0;
             aIndex[0][1]=2;
             aIndex[1][1]=2;
@@ -133,7 +144,7 @@ public class BearAndSteadyGene {
         }
         
         if(cCount>idealCount){
-            cIndex[0][0]=idealCount-cCount;
+            cIndex[0][0]=cCount-idealCount;
             cIndex[1][0]=0;
             cIndex[0][1]=2;
             cIndex[1][1]=2;
@@ -142,7 +153,7 @@ public class BearAndSteadyGene {
         }
         
         if(tCount>idealCount){
-            tIndex[0][0]=idealCount-tCount;
+            tIndex[0][0]=tCount-idealCount;
             tIndex[1][0]=0;
             tIndex[0][1]=2;
             tIndex[1][1]=2;
@@ -151,7 +162,7 @@ public class BearAndSteadyGene {
         }
         
         if(gCount>idealCount){
-            gIndex[0][0]=idealCount-gCount;
+            gIndex[0][0]=gCount-idealCount;
             gIndex[1][0]=0;
             gIndex[0][1]=2;
             gIndex[1][1]=2;
@@ -160,7 +171,7 @@ public class BearAndSteadyGene {
         }
         int minimumLen = 999999;
         
-        while(true) {
+        parent:while(true) {
         
             int[][] curArray = null;
             boolean matchFound = true;
@@ -169,6 +180,9 @@ public class BearAndSteadyGene {
             
             for(int[][] arr:eligibleArr){
             
+                if(arr[1][1]>=arr.length)
+                    break parent;
+                
                 if(arr[0][0]>arr[1][0]){
                 
                     matchFound = false;
@@ -268,5 +282,6 @@ public class BearAndSteadyGene {
             }
             
         }
+        System.out.print(minimumLen);
     }
 }
